@@ -1,0 +1,38 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: true
+        fetch-depth: 0
+
+    - name: Update `apt` Sources
+      run: sudo apt-get update -y
+
+    - name: Install Base Tools
+      run: sudo apt-get install -y software-properties-common build-essential
+
+    - name: Debug Available Packages
+      run: apt-cache search mesa | grep dev && apt-cache search wayland | grep dev && apt-cache search xkbcommon
+
+    - name: Install Dependencies
+      run: sudo apt-get update && sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev xorg-dev libwayland-dev wayland-protocols libxkbcommon-dev cmake
+
+    - name: Configure with CMake
+      run: cmake .
+
+    - name: Build
+      run: cmake --build .
+
+    - name: Test
+      run: ctest
