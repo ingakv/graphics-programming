@@ -1,7 +1,7 @@
 #include "GLFWApplication/GLFWApplication.h"
 #include "GeometricTools/GeometricTools.h"
 #include "GLFWApplication/errorHandling.h"
-#include "Lab1.h"
+#include "../Lab.h"
 #include "Rendering/VertexBuffer.h"
 #include "Rendering/IndexBuffer.h"
 #include "Rendering/VertexArray.h"
@@ -16,7 +16,7 @@ using namespace GeometricTools;
 
 glm::vec3 select_tile_key(GLFWwindow *window, glm::vec2 selectedTile, bool isPressed, glm::vec2 gridSize);
 
-int lab1_App::run() {
+int lab_App::run() {
 
 
     // Enabling capture of debug output to get messages about potential issues.
@@ -31,7 +31,7 @@ int lab1_App::run() {
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
 
 
-    auto shaderProgram = std::make_shared<Shader>("", "lab1");
+    auto shaderProgram = std::make_shared<Shader>("grid");
 
 
     //////////////// Grid //////////////////

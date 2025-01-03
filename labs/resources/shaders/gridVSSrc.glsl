@@ -2,19 +2,12 @@
 
     layout(location = 0) in vec2 position;
 
-    // The currently selected square which should be highlighted
     uniform vec2 selectedSquare;
-    uniform mat4 u_TransformationMat;
 
-    // Output variable to pass tcoords to the fragment shader
-    out vec2 vs_position;
     out vec4 v_Color;
 
     void main() {
-
-        // Combine all of the matrices together to get the correct coordinates
-        gl_Position = u_TransformationMat * vec4(position, 0.0, 1.0);
-        vs_position = position;
+        gl_Position = vec4(position, 0.0, 1.0); // Homogeneous coordinates 3D+1
 
         // The position of the pixels
         float i = position.x * 8.0f + 3.0f;

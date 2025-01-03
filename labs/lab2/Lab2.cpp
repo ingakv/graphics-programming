@@ -1,4 +1,4 @@
-#include "Lab2.h"
+#include "../Lab.h"
 #include "GeometricTools/GeometricTools.h"
 #include "Rendering/RenderCommands.h"
 #include "GLFWApplication/errorHandling.h"
@@ -22,7 +22,7 @@ using namespace RenderCommands;
 glm::vec3 rotate_cube_key(GLFWwindow *window, glm::vec3 rotation);
 
 
-int lab2_App::run() {
+int lab_App::run() {
 
 
     // Enabling capture of debug output to get messages about potential issues.
@@ -38,7 +38,7 @@ int lab2_App::run() {
 
 
     //////////////// Shader //////////////////
-    auto cubeShaderProgram = std::make_shared<Shader>("cube", "lab2");
+    auto cubeShaderProgram = std::make_shared<Shader>("plaincube");
     auto shaderProgram = std::make_shared<Shader>("triangle");
 
     //////////////// Cube //////////////////
@@ -58,6 +58,7 @@ int lab2_App::run() {
     auto cubeBufferLayout = BufferLayout({{ShaderDataType::Float3, "position"}});
 
     auto cubeIndexBuffer = std::make_shared<IndexBuffer>(cube_indices.data(), cube_indices.size(), cubeBufferLayout);
+
 
 
     // Connect all the arrays
@@ -143,7 +144,7 @@ int lab2_App::run() {
         // Poll for events (like input)
         glfwPollEvents();
 
-        // Time management for alternate flag
+        // Update time
         currentTime = glfwGetTime();
 
         // Clear the screen

@@ -1,4 +1,4 @@
-#include "Lab3.h"
+#include "../Lab.h"
 #include "GeometricTools/GeometricTools.h"
 #include "Rendering/RenderCommands.h"
 #include "GLFWApplication/errorHandling.h"
@@ -22,7 +22,7 @@ using namespace RenderCommands;
 glm::vec3 rotate_cube_key(GLFWwindow *window, glm::vec3 rotation);
 
 
-int lab3_App::run() {
+int lab_App::run() {
 
 
     // Enabling capture of debug output to get messages about potential issues.

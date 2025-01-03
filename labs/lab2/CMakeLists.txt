@@ -11,7 +11,7 @@ project(Lab2)
 # and imported targets related to OpenGL that can be used later.
 find_package(OpenGL REQUIRED)
 
-add_executable(${PROJECT_NAME} main.cpp Lab2.cpp)
+add_executable(${PROJECT_NAME} ../main.cpp Lab2.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE framework)
 
