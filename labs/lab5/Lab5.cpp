@@ -39,7 +39,7 @@ int lab5_App::run() {
 
 
     //////////////// Shaders //////////////////
-    auto lab_name = "default";
+    auto lab_name = "labs";
 
     auto gridShaderProgram = std::make_shared<Shader>(lab_name, "grid");
     auto cubeShaderProgram = std::make_shared<Shader>(lab_name, "cube");

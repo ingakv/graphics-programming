@@ -39,10 +39,8 @@ int lab4_App::run() {
 
 
     //////////////// Shaders //////////////////
-    auto lab_name = "default";
-
-    auto gridShaderProgram = std::make_shared<Shader>(lab_name, "grid");
-    auto cubeShaderProgram = std::make_shared<Shader>(lab_name, "cube");
+    auto gridShaderProgram = std::make_shared<Shader>("labs", "grid");
+    auto cubeShaderProgram = std::make_shared<Shader>("lab4", "cube");
 
     //////////////// Grid //////////////////
 
@@ -66,8 +64,7 @@ int lab4_App::run() {
 
     auto gridBufferLayout = BufferLayout({ {ShaderDataType::Float2, "position"} });
 
-    auto gridIndexBuffer = std::make_shared<IndexBuffer>(grid_indices.data(), grid_indices.size()*x*y, gridBufferLayout);
-
+    auto gridIndexBuffer = std::make_shared<IndexBuffer>(grid_indices.data(), grid_indices.size(), gridBufferLayout);
 
 
 

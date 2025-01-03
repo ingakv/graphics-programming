@@ -37,8 +37,11 @@ int lab3_App::run() {
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
 
 
-    auto cubeShaderProgram = std::make_shared<Shader>("lab3", "cube");
-    auto outlineShaderProgram = std::make_shared<Shader>("lab3", "outline");
+
+    auto lab_name = "labs";
+
+    auto cubeShaderProgram = std::make_shared<Shader>(lab_name, "plaincube");
+    auto outlineShaderProgram = std::make_shared<Shader>(lab_name, "outline");
 
 
     //////////////// Cube //////////////////

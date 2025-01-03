@@ -77,8 +77,11 @@ std::string Shader::readFromShader(const std::string& shaderSrc, const std::stri
     std::string lab = lab_name;
 
     // If it is a lab, the filepath will be updated to include the labs subfolder
-    if (lab_name.find("lab") != std::string::npos) filepath = "labs/";
-    if (lab_name.find("default") != std::string::npos) filepath = "labs"; lab = "";
+    if (lab_name.find("labs") != std::string::npos) {
+        filepath = "labs";
+        lab = "";
+    }
+    else if (lab_name.find("lab") != std::string::npos) filepath = "labs/";
 
     std::ifstream file("../../" + filepath + lab +"/resources/shaders/" + shaderSrc + ".glsl");
 

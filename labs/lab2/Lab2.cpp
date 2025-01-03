@@ -57,7 +57,7 @@ int lab2_App::run() {
     auto gridBufferLayout = BufferLayout({{ShaderDataType::Float2, "position"}});
 
     // Count     =     # of coordinates in a square     *     # of rows     *     # of columns
-    auto gridIndexBuffer = std::make_shared<IndexBuffer>(grid_indices.data(), grid_indices.size() * x * y, gridBufferLayout);
+    auto gridIndexBuffer = std::make_shared<IndexBuffer>(grid_indices.data(), grid_indices.size(), gridBufferLayout);
 
 
     // Connect all the arrays
