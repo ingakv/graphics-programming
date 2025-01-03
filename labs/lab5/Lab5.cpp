@@ -19,7 +19,6 @@
 using namespace GeometricTools;
 using namespace RenderCommands;
 
-glm::vec3 select_tile_key(GLFWwindow *window, glm::vec2 selectedTile, bool isPressed, glm::vec2 gridSize);
 glm::vec3 rotate_cube_key(GLFWwindow *window, glm::vec3 rotation);
 
 
@@ -38,44 +37,8 @@ int lab5_App::run() {
     std::cout << "OpenGL version: " << glGetString(GL_VERSION) << "\n";
 
 
-    //////////////// Shaders //////////////////
-    auto lab_name = "labs";
-
-    auto gridShaderProgram = std::make_shared<Shader>(lab_name, "grid");
-    auto cubeShaderProgram = std::make_shared<Shader>(lab_name, "cube");
-
-    //////////////// Grid //////////////////
-
-    int x,y;
-    x = y = 8;
-
-
-    // The layout of the grid
-    auto grid = UnitGridGeometry2D(x, y);
-
-
-    // The grid indices
-    auto grid_indices = UnitGridTopologyTriangles(x,y);
-
-    // Create buffers and arrays
-
-    auto gridVertexArray = std::make_shared<VertexArray>();
-
-
-    auto gridVertexBuffer = std::make_shared<VertexBuffer>(grid.data(), grid.size());
-
-    auto gridBufferLayout = BufferLayout({
-        {ShaderDataType::Float2, "position"}
-    });
-
-    auto gridIndexBuffer = std::make_shared<IndexBuffer>(grid_indices.data(), grid_indices.size(), gridBufferLayout);
-
-
-    // Connect all the arrays
-    gridVertexBuffer->SetLayout(gridBufferLayout);
-    gridVertexArray->AddVertexBuffer(gridVertexBuffer);
-    gridVertexArray->SetIndexBuffer(gridIndexBuffer);
-
+    //////////////// Shader //////////////////
+    auto cubeShaderProgram = std::make_shared<Shader>("labs", "cube");
 
 
     //////////////// Cube //////////////////
@@ -115,20 +78,11 @@ int lab5_App::run() {
     ////////////////////////////////////////
 
 
-
-
-
-
     // The default selected tile
     auto selectedTile = glm::vec2(0, 0);
 
     // The cube's rotation
     glm::vec3 rotation = {0.0f, 0.0f, 0.0f};
-
-    // Whether a key is pressed
-    bool isPressed = false;
-
-
 
 
     // Transformation matrix
@@ -141,8 +95,6 @@ int lab5_App::run() {
 
     auto perspectiveCamera = PerspectiveCamera(perspectiveFrustrum, cameraPosition, cameraTarget, upVector);
     auto orthographicCamera = OrthographicCamera(orthographicFrustrum, cameraPosition);
-
-
 
 
     // Enable depth testing
@@ -159,11 +111,6 @@ int lab5_App::run() {
 
     // Application loop code
     while (!glfwWindowShouldClose(window)) {
-
-        // The currently or newly selected tile
-        auto key_call_board = select_tile_key(window, selectedTile, isPressed, glm::vec2(x,y));
-        selectedTile = glm::vec2(key_call_board.x, key_call_board.y);
-        isPressed = key_call_board.z;
 
         // Update cube rotation
         perspectiveFrustrum.rotation = rotate_cube_key(window, perspectiveFrustrum.rotation);
@@ -237,31 +184,8 @@ int lab5_App::run() {
         glEnable(GL_DEPTH_TEST);
 
 
-
-
-        // Grid
-        gridShaderProgram->Bind();
-        gridVertexArray->Bind();
-
-        // Upload the texture
-        gridShaderProgram->UploadUniformInt("uTexture", 1);
-
-        // Update the selected tile
-        gridShaderProgram->UploadUniformFloat2("selectedSquare", selectedTile);
-
-        // Transform the grid into the correct transformation matrix
-        gridShaderProgram->UploadUniformMatrix4fv("u_TransformationMat", perspectiveCamera.GetViewProjectionMatrix());
-
-//        DrawIndex(gridVertexArray, GL_TRIANGLES);
-
-        gridVertexArray->Unbind();
-
-
-
-
         // Swap buffers to show our shape
         glfwSwapBuffers(window);
-
 
 
         // The window closes when ESC is pressed
@@ -270,8 +194,6 @@ int lab5_App::run() {
     }
 
 
-
-    gridShaderProgram->Unbind();
     cubeShaderProgram->Unbind();
 
     glfwTerminate();
@@ -305,40 +227,4 @@ glm::vec3 rotate_cube_key(GLFWwindow *window, glm::vec3 rotation) {
     }
 
     return {rotation};
-}
-
-
-glm::vec3 select_tile_key(GLFWwindow *window, glm::vec2 selectedTile, bool isPressed, const glm::vec2 gridSize) {
-
-    glm::vec2 prevTile = selectedTile;
-
-    // The keys and their corresponding actions
-    std::vector keys = {GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_S, GLFW_KEY_W};
-
-    std::vector actions = {
-        glm::vec2(selectedTile.x - 1, selectedTile.y),
-        glm::vec2(selectedTile.x + 1, selectedTile.y),
-        glm::vec2(selectedTile.x, selectedTile.y - 1),
-        glm::vec2(selectedTile.x, selectedTile.y + 1)
-    };
-
-
-    // Decide between either checking for a new key to be pressed
-    // or for an already pressed key to be released
-    bool checkReleased = isPressed;
-    isPressed = false;
-
-    for (int i = 0; i < keys.size(); ++i) {
-        // Checks if a new key has been pressed, and updates selectedTile
-        if (!checkReleased && glfwGetKey(window, keys[i]) == GLFW_PRESS) { selectedTile = actions[i]; isPressed = true;}
-
-        // Ensures that a key input is only read once
-        if (checkReleased && glfwGetKey(window, keys[i]) != GLFW_RELEASE) { isPressed = true; }
-    }
-
-
-    // The selected tile won't move if it would have moved outside the chess board
-    if (selectedTile.x < 0 || selectedTile.y < 0 || selectedTile.x >= gridSize.x || selectedTile.y >= gridSize.y) { selectedTile = prevTile; }
-
-    return {selectedTile, isPressed};
 }

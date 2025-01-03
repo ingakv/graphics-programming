@@ -119,6 +119,10 @@ namespace GeometricTools {
     //     5-------7
 
 
+    constexpr std::array<GLuint, 1*3> UnitTriangleTopology = {
+        0,1,2
+    };
+
     constexpr std::array<GLuint, 6*6> UnitCubeTopologyTriangles = {
 
         // Front
@@ -152,27 +156,27 @@ namespace GeometricTools {
     };
 
     constexpr std::array<unsigned int, 6 * 3 * 2> UnitCube3DTopologyTriangles24 = {
-                
+
         // Front
         0,1,2,
         2,1,3,
-    
+
         // Back
         4,5,6,
         6,5,7,
-    
+
         // Left
         8,9,10,
         10,9,11,
-    
+
         // Right
         12,13,14,
         14,13,15,
-    
+
         // Top
         16,17,18,
         18,17,19,
-    
+
         // Bottom
         20,21,22,
         22,21,23

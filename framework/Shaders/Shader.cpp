@@ -58,6 +58,11 @@ void Shader::UploadUniformFloat3(const std::string& name, const glm::vec3& vecto
     glUniform3f(GetLocation(name), vector.x, vector.y, vector.z);
 }
 
+
+void Shader::UploadUniformFloat4(const std::string& name, const glm::vec4& vector) const{
+    glUniform4f(GetLocation(name), vector.x, vector.y, vector.z, vector.w);
+}
+
 // Get the location of the uniform in your shader program
 int Shader::GetLocation(const std::string &name) const {
     return glGetUniformLocation(ShaderProgram, name.c_str());

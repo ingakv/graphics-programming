@@ -22,6 +22,7 @@ public:
     void UploadUniformFloat(const std::string& name, const float& value) const;
     void UploadUniformFloat2(const std::string& name, const glm::vec2& vector) const;
     void UploadUniformFloat3(const std::string& name, const glm::vec3& vector) const;
+    void UploadUniformFloat4(const std::string& name, const glm::vec4& vector) const;
     void UploadUniformInt(const std::string& name, const int& index) const;
     void UploadUniformMatrix4fv(const std::string& name, const glm::mat4& matrix) const;
 
