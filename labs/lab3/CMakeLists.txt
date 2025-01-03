@@ -3,7 +3,7 @@
 # all the features that are required.
 cmake_minimum_required(VERSION 3.15)
 
-project(Lab5)
+project(Lab3)
 
 # Search for the OpenGL package on the system. The REQUIRED argument
 # ensures that if OpenGL is not found, CMake will produce an error and
@@ -11,7 +11,7 @@ project(Lab5)
 # and imported targets related to OpenGL that can be used later.
 find_package(OpenGL REQUIRED)
 
-add_executable(${PROJECT_NAME} main.cpp Lab5.cpp)
+add_executable(${PROJECT_NAME} main.cpp Lab3.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE framework)
 

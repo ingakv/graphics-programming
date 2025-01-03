@@ -51,8 +51,8 @@ int assignment_App::run() {
 
     //////////////// Shaders //////////////////
     auto lab_name = "assignment";
-    auto gridShaderProgram = std::make_shared<Shader>(lab_name, "grid");
-    auto cubeShaderProgram = std::make_shared<Shader>(lab_name, "cube");
+    auto gridShaderProgram = std::make_shared<Shader>("grid", lab_name);
+    auto cubeShaderProgram = std::make_shared<Shader>("cube", lab_name);
 
     //////////////// Grid //////////////////
 

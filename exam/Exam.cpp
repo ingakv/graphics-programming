@@ -62,8 +62,8 @@ int exam_App::run() {
 
     //////////////// Shaders //////////////////
     auto lab_name = "exam";
-    auto gridShaderProgram = std::make_shared<Shader>(lab_name, "grid");
-    auto cubeShaderProgram = std::make_shared<Shader>(lab_name, "cube");
+    auto gridShaderProgram = std::make_shared<Shader>("grid", lab_name);
+    auto cubeShaderProgram = std::make_shared<Shader>("cube", lab_name);
 
     //////////////// Grid / Floor //////////////////
 
@@ -234,10 +234,10 @@ int exam_App::run() {
 
     //////////////// Upload to the shaders //////////////////
 
-    
+
     glm::vec4 lightColor = glm::vec4 (scale(1.0f), 1.5f);
-    
-    
+
+
     for (auto & shader : {gridShaderProgram, cubeShaderProgram}) {
 
         shader->Bind();
@@ -265,7 +265,7 @@ int exam_App::run() {
         findTexture(gridShaderProgram, Empty);
 
         shader->Unbind();
-        
+
     }
 
 
@@ -582,9 +582,9 @@ glm::vec3 rotate_key(GLFWwindow *window, glm::vec3 r) {
 }
 
 glm::vec<2, int> moveDirections(glm::vec2 oldPos, Direction direction) {
-    
+
     glm::vec<2,int> newPos{};
-    
+
     // Calculates the new position based on what direction the cube should be moved in
     switch (direction) {
         case Left: newPos = {oldPos.x, oldPos.y - 1};
@@ -599,7 +599,7 @@ glm::vec<2, int> moveDirections(glm::vec2 oldPos, Direction direction) {
     }
 
     return newPos;
-    
+
 }
 
 
@@ -669,7 +669,7 @@ void moveObjectOnBoard(glm::vec<2, int> moveCubeFrom, Direction direction, doubl
 
 // Uploads the correct texture according to the object type
 void findTexture(const std::shared_ptr<Shader>& shaderProgram, Object objectType) {
-    
+
     std::string name;
 
     // Convert to string
@@ -699,7 +699,7 @@ bool move_player_key(GLFWwindow *window, bool playerMoved, double curTime) {
         {GLFW_KEY_DOWN,Down},
 
         {GLFW_KEY_UP,Up}
-        
+
     };
 
     bool isPressed = playerMoved;

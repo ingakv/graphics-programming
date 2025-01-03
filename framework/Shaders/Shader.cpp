@@ -1,7 +1,7 @@
 #include "Shader.h"
 
 
-Shader::Shader(const std::string &lab_name, const std::string &vertexShaderSrc, const std::string &fragmentShaderSrc) {
+Shader::Shader(const std::string &vertexShaderSrc, const std::string &fragmentShaderSrc, const std::string &lab_name) {
     auto vSrc = readFromShader(vertexShaderSrc + "VSSrc", lab_name);
     auto fSrc = readFromShader(fragmentShaderSrc + "FSSrc", lab_name);
 
@@ -22,8 +22,13 @@ Shader::Shader(const std::string &lab_name, const std::string &vertexShaderSrc, 
     glDeleteShader(FragmentShader);
 }
 
-Shader::Shader(const std::string &lab_name, const std::string &shaderSrc) :
-Shader(lab_name, shaderSrc, shaderSrc) {}
+
+Shader::Shader(const std::string &shaderSrc, const std::string &lab_name) :
+        Shader(shaderSrc, shaderSrc, lab_name) {}
+
+
+Shader::Shader(const std::string &shaderSrc) :
+        Shader(shaderSrc, "") {}
 
 Shader::~Shader() {
     glDeleteShader(ShaderProgram);
@@ -79,16 +84,14 @@ std::string Shader::readFromShader(const std::string& shaderSrc, const std::stri
     std::string filepath;
     std::string shaderSource;
     std::string line;
-    std::string lab = lab_name;
 
-    // If it is a lab, the filepath will be updated to include the labs subfolder
-    if (lab_name.find("labs") != std::string::npos) {
-        filepath = "labs";
-        lab = "";
-    }
+    // Default filepath
+    if (lab_name.empty()) filepath = "labs";
+
+    // If it is a lab, the filepath will be updated to include the lab subfolder
     else if (lab_name.find("lab") != std::string::npos) filepath = "labs/";
 
-    std::ifstream file("../../" + filepath + lab +"/resources/shaders/" + shaderSrc + ".glsl");
+    std::ifstream file("../../" + filepath + lab_name +"/resources/shaders/" + shaderSrc + ".glsl");
 
     if (!file.is_open()) {
         std::cerr << "Failed to open the file." << std::endl;

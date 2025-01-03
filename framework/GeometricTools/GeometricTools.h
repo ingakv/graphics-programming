@@ -104,10 +104,12 @@ namespace GeometricTools {
 
 
 
+    constexpr std::array<GLuint, 1*3> UnitTriangleTopology = {
+            0,1,2
+    };
 
 
     // These indices make the following triangles:
-
 
     //     4-------6
     //   /       /
@@ -117,11 +119,6 @@ namespace GeometricTools {
     // 1-------3
     //   \       \
     //     5-------7
-
-
-    constexpr std::array<GLuint, 1*3> UnitTriangleTopology = {
-        0,1,2
-    };
 
     constexpr std::array<GLuint, 6*6> UnitCubeTopologyTriangles = {
 

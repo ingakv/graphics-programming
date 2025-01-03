@@ -1,4 +1,4 @@
-#include "Lab4.h"
+#include "Lab3.h"
 #include "GeometricTools/GeometricTools.h"
 #include "Rendering/RenderCommands.h"
 #include "GLFWApplication/errorHandling.h"
@@ -22,7 +22,7 @@ using namespace RenderCommands;
 glm::vec3 rotate_cube_key(GLFWwindow *window, glm::vec3 rotation);
 
 
-int lab4_App::run() {
+int lab3_App::run() {
 
 
     // Enabling capture of debug output to get messages about potential issues.
@@ -38,24 +38,24 @@ int lab4_App::run() {
 
 
     //////////////// Shader //////////////////
-    auto cubeShaderProgram = std::make_shared<Shader>("lab4", "cube");
+    auto cubeShaderProgram = std::make_shared<Shader>("cube");
 
 
     //////////////// Cube //////////////////
 
     // The layout of the cube
-    auto cube = UnitCube;
+    auto cube = UnitCube3D24WNormals;
 
 
     // The cube indices
-    auto cube_indices = UnitCubeTopologyTriangles;
+    auto cube_indices = UnitCube3DTopologyTriangles24;
 
     // Create buffers and arrays
     auto cubeVertexArray = std::make_shared<VertexArray>();
 
     auto cubeVertexBuffer = std::make_shared<VertexBuffer>(cube.data(), cube.size());
 
-    auto cubeBufferLayout = BufferLayout({{ShaderDataType::Float3, "position"}});
+    auto cubeBufferLayout = BufferLayout({{ShaderDataType::Float3, "position", true}, {ShaderDataType::Float3, "normal"}});
 
     auto cubeIndexBuffer = std::make_shared<IndexBuffer>(cube_indices.data(), cube_indices.size(), cubeBufferLayout);
 
@@ -73,6 +73,7 @@ int lab4_App::run() {
 
     auto textures = TextureManager::GetInstance();
     textures->LoadCubeMapRGBA("gato_cube", filepath, 0, false);
+    textures->LoadTexture2DRGBA("gato_grid", filepath, 1, true);
 
     ////////////////////////////////////////
 
@@ -89,7 +90,7 @@ int lab4_App::run() {
     glm::vec3 cameraTarget(0.0f, 0.0f, 0.0f);   // Camera's target point
     glm::vec3 upVector(0.0f, 1.0f, 0.0f);      // Up vector
 
-    PerspectiveCamera::Frustrum perspectiveFrustrum = {90.0f, width, height, 1.0f, -10.0f, scale(1.0f), rotation};
+    PerspectiveCamera::Frustrum perspectiveFrustrum = {90.0f, width, height, 0.1f, -10.0f, scale(1.0f), rotation};
     OrthographicCamera::Frustrum orthographicFrustrum = {-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f, rotation};
 
     auto perspectiveCamera = PerspectiveCamera(perspectiveFrustrum, cameraPosition, cameraTarget, upVector);
@@ -105,6 +106,8 @@ int lab4_App::run() {
     // Set the blending function: s*alpha + d(1-alpha)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
+    double currentTime;
+    glfwSetTime(0.0);
 
     // Application loop code
     while (!glfwWindowShouldClose(window)) {
@@ -120,11 +123,25 @@ int lab4_App::run() {
         // Poll for events (like input)
         glfwPollEvents();
 
+        // Update time
+        currentTime = glfwGetTime();
+
         // Clear the screen
         Clear();
 
+
+
+        // Dynamically changes the light between 0.5f and 1.0f
+        float dynamicLight = (sin(currentTime) + 3.0f) / 4.0f;
+
+        glm::vec4 backgroundColor = glm::vec4(0.5f, 0.3f, 0.7f, 1.0f);
+
+
         // Background color
-        SetClearColor(glm::vec4(0.5f, 0.3f, 0.7f, 1.0f));
+        SetClearColor(backgroundColor * dynamicLight);
+
+
+
 
 
         // Unit cube
@@ -141,6 +158,24 @@ int lab4_App::run() {
 
         // Upload the texture
         cubeShaderProgram->UploadUniformInt("uTexture", 0);
+
+        // Upload the ambient light
+        cubeShaderProgram->UploadUniformFloat3("u_ambientColor", backgroundColor);
+        cubeShaderProgram->UploadUniformFloat("u_ambientStrength", 0.5);
+
+        // Upload the camera position
+        cubeShaderProgram->UploadUniformFloat3("u_lightSourcePosition", cameraPosition);
+        cubeShaderProgram->UploadUniformFloat3("u_cameraPosition", cameraPosition);
+
+        // Upload the diffuse color and strength factor
+        cubeShaderProgram->UploadUniformFloat3("u_diffuseColor", backgroundColor);
+        cubeShaderProgram->UploadUniformFloat("u_diffuseStrength", 0.5);
+
+
+        // Upload the specular color and strength factor
+        cubeShaderProgram->UploadUniformFloat3("u_specularColor", backgroundColor);
+        cubeShaderProgram->UploadUniformFloat("u_specularStrength", 1.0);
+
 
         SetSolidMode();
 
@@ -174,7 +209,7 @@ glm::vec3 rotate_cube_key(GLFWwindow *window, glm::vec3 rotation) {
     float rotateSpeed = 0.05f;
 
     // The keys and their corresponding actions
-    std::vector<int> keys = {GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_DOWN, GLFW_KEY_UP};
+    std::vector keys = {GLFW_KEY_LEFT, GLFW_KEY_RIGHT, GLFW_KEY_DOWN, GLFW_KEY_UP};
 
     std::vector<glm::vec3> actions = {
         {rotation.x - rotateSpeed, rotation.y, rotation.z},

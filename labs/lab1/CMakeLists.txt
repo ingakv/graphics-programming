@@ -13,4 +13,4 @@ find_package(OpenGL REQUIRED)
 
 add_executable(${PROJECT_NAME} main.cpp Lab1.cpp)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC framework)
+target_link_libraries(${PROJECT_NAME} PRIVATE framework)

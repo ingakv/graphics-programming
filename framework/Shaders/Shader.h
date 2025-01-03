@@ -12,8 +12,9 @@
 class Shader
 {
 public:
-    Shader(const std::string &lab_name, const std::string &shaderSrc);
-    Shader(const std::string &lab_name, const std::string &vertexShaderSrc, const std::string &fragmentShaderSrc);
+    Shader(const std::string &shaderSrc);
+    Shader(const std::string &shaderSrc, const std::string &lab_name);
+    Shader(const std::string &vertexShaderSrc, const std::string &fragmentShaderSrc, const std::string &lab_name);
     ~Shader();
 
     void Bind() const;
